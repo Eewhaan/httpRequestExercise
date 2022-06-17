@@ -16,6 +16,8 @@
 		DB1B0F7B2859000F00497332 /* POSTMethodUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1B0F7A2859000F00497332 /* POSTMethodUploadData.swift */; };
 		DB36FA27285A5EA500F8214B /* PUTMethodUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB36FA26285A5EA500F8214B /* PUTMethodUploadData.swift */; };
 		DB8F7CEB285A5080002B0F24 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8F7CEA285A5080002B0F24 /* DetailViewController.swift */; };
+		DBF77D7C285C9CDC002E1DB7 /* PATCHMethodUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF77D7B285C9CDC002E1DB7 /* PATCHMethodUploadData.swift */; };
+		DBF77D7E285CA4B8002E1DB7 /* MethodNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF77D7D285CA4B8002E1DB7 /* MethodNames.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		DB1B0F7A2859000F00497332 /* POSTMethodUploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSTMethodUploadData.swift; sourceTree = "<group>"; };
 		DB36FA26285A5EA500F8214B /* PUTMethodUploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUTMethodUploadData.swift; sourceTree = "<group>"; };
 		DB8F7CEA285A5080002B0F24 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		DBF77D7B285C9CDC002E1DB7 /* PATCHMethodUploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PATCHMethodUploadData.swift; sourceTree = "<group>"; };
+		DBF77D7D285CA4B8002E1DB7 /* MethodNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodNames.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,9 +69,11 @@
 				DB1B0F662858FA1B00497332 /* AppDelegate.swift */,
 				DB1B0F682858FA1B00497332 /* SceneDelegate.swift */,
 				DB1B0F6A2858FA1B00497332 /* ViewController.swift */,
+				DBF77D7D285CA4B8002E1DB7 /* MethodNames.swift */,
 				DB8F7CEA285A5080002B0F24 /* DetailViewController.swift */,
 				DB1B0F7A2859000F00497332 /* POSTMethodUploadData.swift */,
 				DB36FA26285A5EA500F8214B /* PUTMethodUploadData.swift */,
+				DBF77D7B285C9CDC002E1DB7 /* PATCHMethodUploadData.swift */,
 				DB1B0F6C2858FA1B00497332 /* Main.storyboard */,
 				DB1B0F6F2858FA1F00497332 /* Assets.xcassets */,
 				DB1B0F712858FA1F00497332 /* LaunchScreen.storyboard */,
@@ -148,9 +154,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB1B0F6B2858FA1B00497332 /* ViewController.swift in Sources */,
+				DBF77D7E285CA4B8002E1DB7 /* MethodNames.swift in Sources */,
 				DB36FA27285A5EA500F8214B /* PUTMethodUploadData.swift in Sources */,
 				DB1B0F672858FA1B00497332 /* AppDelegate.swift in Sources */,
 				DB8F7CEB285A5080002B0F24 /* DetailViewController.swift in Sources */,
+				DBF77D7C285C9CDC002E1DB7 /* PATCHMethodUploadData.swift in Sources */,
 				DB1B0F7B2859000F00497332 /* POSTMethodUploadData.swift in Sources */,
 				DB1B0F692858FA1B00497332 /* SceneDelegate.swift in Sources */,
 			);

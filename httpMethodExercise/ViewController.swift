@@ -20,20 +20,22 @@ class ViewController: UIViewController {
         
     @IBAction func buttonTapped(_ sender: UIButton) {
         switch sender.titleLabel?.text {
-        case "POST":
+        case MethodNames.POST.rawValue:
             postMethod()
-        case "GET":
+        case MethodNames.GET.rawValue:
             getMethod()
-        case "PUT":
+        case MethodNames.PUT.rawValue:
             putMethod()
-        case "DELETE":
+        case MethodNames.DELETE.rawValue:
             deleteMethod()
+        case MethodNames.PATCH.rawValue:
+            patchMethod()
         default:
             break
         }
     }
     
-    // MARK: HTTP Request METHODS
+    // MARK: METHODS
     
     func postMethod() {
         guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
@@ -66,25 +68,7 @@ class ViewController: UIViewController {
                 print("Error: HTTP request failed")
                 return
             }
-            do {
-                guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                print("Error: Cannot convert data to JSON object")
-                return
-                    
-                }
-                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                print("Error: Cannot convert JSON object to Pretty JSON data")
-                return
-                }
-                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                print("Error: Couldn't print JSON in String")
-                return
-                }
-                self.openDetailsVC(jsonString: prettyPrintedJson, title: "POST METHOD")
-            } catch {
-                    print("Error: Trying to convert JSON data to string")
-                    return
-            }
+            self.prepareResultForDisplay(method: MethodNames.POST.rawValue, data: data)
         }.resume()
     }
     
@@ -97,7 +81,7 @@ class ViewController: UIViewController {
         request.httpMethod = "GET"
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error calling GET: \(error?.localizedDescription)")
+                print("Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard let data = data else {
@@ -106,27 +90,10 @@ class ViewController: UIViewController {
             }
             guard let response = response as? HTTPURLResponse, (200..<299) ~= response.statusCode else {
                 print("Error: HTTP Request failed")
-                print(response)
+                print(String(describing: response))
                 return
             }
-            do {
-                guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                    print("Unable to convert data to JSONObject")
-                    return
-                }
-                guard let prettyPrintedJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                    print("Error converting JSONObject to Pretty JSON Data")
-                    return
-                }
-                guard let prettyPrintedString = String(data: prettyPrintedJsonData, encoding: .utf8) else {
-                    print("Unable to convert JSON Data to String")
-                    return
-                }
-                self.openDetailsVC(jsonString: prettyPrintedString, title: "GET METHOD")
-            } catch {
-                print("Error: failed to convert JSON data to string")
-                return
-            }
+            self.prepareResultForDisplay(method: MethodNames.GET.rawValue, data: data)
         }.resume()
         
     }
@@ -150,7 +117,7 @@ class ViewController: UIViewController {
         request.httpBody = jsonData
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard let data = data else {
@@ -159,27 +126,10 @@ class ViewController: UIViewController {
             }
             guard let response = response as? HTTPURLResponse, (200..<299) ~= response.statusCode else {
                 print ("Error calling PUT Method")
-                print(response)
+                print(String(describing: response))
                 return
             }
-            do {
-                guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                    print("Error converting data to JSON Object")
-                    return
-                }
-                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                    print("Error converting JSON Object to Pretty JSON Data")
-                    return
-                }
-                guard let jsonString = String(data: prettyJsonData, encoding: .utf8) else {
-                    print("Error: failed to convert Pretty JSON Data to String")
-                    return
-                }
-                self.openDetailsVC(jsonString: jsonString, title: "PUT METHOD")
-            } catch {
-                print("Error: failed to convert JSON data to String")
-                return
-            }
+            self.prepareResultForDisplay(method: MethodNames.PUT.rawValue, data: data)
         }.resume()
     }
     
@@ -193,7 +143,7 @@ class ViewController: UIViewController {
         request.httpMethod = "DELETE"
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard let data = data else {
@@ -202,33 +152,46 @@ class ViewController: UIViewController {
             }
             guard let response = response as? HTTPURLResponse, (200..<299) ~= response.statusCode else {
                 print ("Error calling DELETE Method")
-                print(response)
+                print(String(describing: response))
                 return
             }
-            do {
-                guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                    print("Error converting data to JSON Object")
-                    return
-                }
-                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                    print("Error converting JSON Object to Pretty JSON Data")
-                    return
-                }
-                guard let jsonString = String(data: prettyJsonData, encoding: .utf8) else {
-                    print("Error: failed to convert Pretty JSON Data to String")
-                    return
-                }
-                self.openDetailsVC(jsonString: jsonString, title: "DELETE METHOD")
-            } catch {
-                print("Error: failed to convert JSON data to String")
-                return
-            }
+            self.prepareResultForDisplay(method: MethodNames.DELETE.rawValue, data: data)
         }.resume()
     }
     
-    
-    // MARK: Segue methods
-    
+    func patchMethod() {
+        guard let url = URL(string: "https://reqres.in/api/users/2") else {
+            print("Unable to create URL")
+            return
+        }
+        let uploadModel = PATCHMethodUploadData(name: "Vidosav")
+        let jsonEncoder = JSONEncoder()
+        guard let jsonUploadData = try? jsonEncoder.encode(uploadModel) else {
+            print("Unable to create JSON Data from Upload Model Data")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonUploadData
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil else {
+                print ("Error: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            guard let data = data else {
+                print("Error: Invalid data")
+                return
+            }
+            guard let response = response as? HTTPURLResponse, (200..<299) ~= response.statusCode else {
+                print ("Error calling PATCH Method")
+                print(String(describing: response))
+                return
+            }
+            self.prepareResultForDisplay(method: MethodNames.PATCH.rawValue, data: data)
+        }.resume()
+    }
+        
     
     func openDetailsVC(jsonString: String, title: String) {
         detailVCPrintedJson = jsonString
@@ -245,6 +208,27 @@ class ViewController: UIViewController {
             let destViewController = segue.destination as? DetailViewController
             destViewController?.title = detailVCTitle
             destViewController?.jsonResults = detailVCPrintedJson ?? ""
+        }
+    }
+    
+    func prepareResultForDisplay(method name: String, data: Data) {
+        do {
+            guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                print("Error converting data to JSON Object")
+                return
+            }
+            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
+                print("Error converting JSON Object to Pretty JSON Data")
+                return
+            }
+            guard let jsonString = String(data: prettyJsonData, encoding: .utf8) else {
+                print("Error: failed to convert Pretty JSON Data to String")
+                return
+            }
+            self.openDetailsVC(jsonString: jsonString, title: "\(name) METHOD")
+        } catch {
+            print("Error: failed to convert JSON data to String")
+            return
         }
     }
 }
